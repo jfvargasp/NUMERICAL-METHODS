@@ -1,0 +1,70 @@
+#############################################################################
+#  Copyright 2017, Iain Dunning, Joey Huchette, Miles Lubin, and contributors
+#  This Source Code Form is subject to the terms of the Mozilla Public
+#  License, v. 2.0. If a copy of the MPL was not distributed with this
+#  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#############################################################################
+# SymPy implementation of the single applications of Simpson’s 3/8 rule
+# An algebraic modelling langauge for Julia
+# See http://github.com/JuliaOpt/JuMP.jl
+#############################################################################
+# Newton-Cotes Integration Formulas,
+# Solution - CH21-15P Numerical Methods for Engineers 5th Edition. Steven C. Chapra. Berger Chair in Computing and Engineering
+# Author: Jhon Vargas
+# Date April 27, 2017
+#############################################################################
+
+using SymPy                    
+x, y, z = Sym("x", "y", "z")  
+fx = x^3-3*y*z # Evaluate the following triple integral 
+
+x0 = -3
+x3 = 1
+fx1=integrate(fx, (x, x0, x3))
+y0 = 0
+y3 = 2
+fy1=integrate(fx1, (y, y0, y3))
+z0 = -2
+z3 = 2
+fz1=integrate(fy1, (z, z0, z3))
+
+println("function              :   ", fx)
+println("definite integral dx  :   ", fx1)
+println("definite integral dy  :   ", fy1)
+println("definite integral dz  :   ", fz1)
+
+#println(" Simpson’s 3/8 rule")
+
+hx=(x3-x0)/3
+println("step size hx               :   ", hx)
+x1=x0+hx
+x2=x1+hx
+hy=(y3-y0)/3
+println("step size hy               :   ", hy)
+y1=y0+hy
+y2=y1+hy
+hz=(z3-z0)/3
+println("step size hz               :   ", hz)
+z1=z0+hz
+z2=z1+hz
+
+x00=subs(fx, (x,x0))
+x01=subs(fx, (x,x1))
+x02=subs(fx, (x,x2))
+x03=subs(fx, (x,x3))
+fx38=(x3-x0)*(x00+3*x01+3*x02+x03)/8
+println("using single applications of Simpson’s 3/8 rule         :   ", fx38)
+
+y00=subs(fx38, (y,y0))
+y01=subs(fx38, (y,y1))
+y02=subs(fx38, (y,y2))
+y03=subs(fx38, (y,y3))
+fy38=(y3-y0)*(y00+3*y01+3*y02+y03)/8
+println("using single applications of Simpson’s 3/8 rule         :   ", fy38)
+
+z00=subs(fy38, (z,z0))
+z01=subs(fy38, (z,z1))
+z02=subs(fy38, (z,z2))
+z03=subs(fy38, (z,z3))
+fz38=(z3-z0)*(z00+3*z01+3*z02+z03)/8
+println("using single applications of Simpson’s 3/8 rule         :   ", fz38)
