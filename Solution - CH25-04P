@@ -1,0 +1,70 @@
+#  Copyright 2017, Iain Dunning, Joey Huchette, Miles Lubin, and contributors
+#  This Source Code Form is subject to the terms of the Mozilla Public
+#  License, v. 2.0. If a copy of the MPL was not distributed with this
+#  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#############################################################################
+# SymPy implementation of the single applications of Simpson’s 3/8 rule
+# An algebraic modelling langauge for Julia
+# See http://github.com/JuliaOpt/JuMP.jl
+#############################################################################
+# Newton-Cotes Integration Formulas,
+# Solution - CH25-04P Numerical Methods for Engineers 5th Edition. Steven C. Chapra. Berger Chair in Computing and Engineering
+# Author: Jhon Vargas
+# Date April 28, 2017
+#############################################################################
+
+# CHAPTER 25 Runge-Kutta Methods
+# using Fourth-Order Runge-Kutta Methods
+
+using SymPy
+
+x0, y0= Sym("x0", "y0")
+fx(x0,y0) = y0*x0^2-1.1*y0 # Use the classical fourth-order RK method to integrate
+#fx generic function with 4 methods)
+
+h=0.25 # using a step size
+
+# initial condition of y = 1 at x = 0.
+x0=0 # the interval from x = 0 to 2 
+y0=1
+
+x1=x0+h
+x2=x1+h
+x3=x2+h
+x4=x3+h
+
+k01=fx(x0,y0)
+k02=fx(x0+(1/2*h), y0+1/2*k01*h)
+k03=fx(x0+(1/2*h), y0+1/2*k02*h)
+k04=fx(x0+(h), y0+ k03*h)
+y1=y0+(1/6)*(k01+2*k02+2*k03+k04)h
+println("k01  : ", k01, "  k02  : ", k02, "  k03  : ", k03, "  k04  : ", k04)
+
+k11=fx(x1,y1)
+k12=fx(x1+(1/2*h), y1+1/2*k11*h)
+k13=fx(x1+(1/2*h), y1+1/2*k12*h)
+k14=fx(x1+(h), y1+ k13*h)
+y2=y1+(1/6)*(k11+2*k12+2*k13+k14)h
+println("k11  : ", k11, "  k12  : ", k12, "  k13  : ", k13, "  k14  : ", k14)
+
+k21=fx(x2,y2)
+k22=fx(x2+(1/2*h), y2+1/2*k21*h)
+k23=fx(x2+(1/2*h), y2+1/2*k22*h)
+k24=fx(x2+(h), y2+ k23*h)
+y3=y2+(1/6)*(k21+2*k22+2*k23+k24)h
+println("k21  : ", k21, "  k22  : ", k22, "  k23  : ", k23, "  k24  : ", k24)
+
+k31=fx(x3,y3)
+k32=fx(x3+(1/2*h), y3+1/2*k31*h)
+k33=fx(x3+(1/2*h), y3+1/2*k32*h)
+k34=fx(x3+(h), y3+ k33*h)
+y4=y3+(1/6)*(k31+2*k32+2*k33+k34)h
+println("k31  : ", k31, "  k32  : ", k32, "  k33  : ", k33, "  k34  : ", k34)
+
+
+println("using Fourth-Order Runge-Kutta Methods")
+println("x0  :    ", x0, "  y0  :  ", y0)
+println("x1  :  ", x1, "  y1  :  ", y1)
+println("x2  :  ", x2, "  y2  :  ", y2)
+println("x3  :  ", x3, "  y3  :  ", y3)
+println("x4  :  ", x4, "  y4  :  ", y4)
